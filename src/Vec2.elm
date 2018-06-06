@@ -4,6 +4,16 @@ module Vec2 exposing (..)
 you with optional arguments, error handling, and records with optional fields.
 
 
+# TYPE ALIASES
+
+@docs Vec2
+
+
+# TYPE CONSTRUCTORS
+
+@docs vec2
+
+
 # Functor
 
 @docs map
@@ -13,34 +23,49 @@ you with optional arguments, error handling, and records with optional fields.
 
 @docs pure, apply, liftA1, liftA2, liftA3
 
-
-# Monad
-
-@docs bind, andThen, return
-
-
-# Foldable
-
-@docs foldl, foldl1, foldr, foldr1
-
-
-# Get / Update
-
-@docs mapNth0, mapNth1, getNth0, getNth1
-
-
-# Conversions
-
-@docs toTuple, fromTuple, toList, fromList
-
-
-# Other Operations
-
-@docs reverse, asArgs
-
 -}
 
 import Types exposing (..)
+
+
+--
+-- # Monad
+-- @docs bind, andThen, return
+-- # Foldable
+-- @docs foldl, foldl1, foldr, foldr1
+-- # Get / Update
+-- @docs mapNth0, mapNth1, getNth0, getNth1
+-- # Conversions
+-- @docs toTuple, fromTuple, toList, fromList
+-- # Other Operations
+-- @docs reverse, asArgs
+--
+-- TYPE ALIASES
+
+
+{-| Polymorphic 2-dimensional vector type
+
+    myVec : Vec2 Bool
+
+-}
+type alias Vec2 a =
+    Types.Vec2 a
+
+
+
+-- TYPE CONSTRUCTORS
+
+
+{-| Construct (Vec2 a) types
+
+    myVec =
+        vec2 True False
+
+-}
+vec2 : a -> a -> Vec2 a
+vec2 =
+    Types.Vec2
+
 
 
 -- FUNCTOR
@@ -116,117 +141,69 @@ liftA3 f v1 v2 v3 =
 
 
 
--- MONAD
-
-
-bind : (a -> Vec2 b) -> Vec2 a -> Vec2 b
-bind f (Vec2 x y) =
-    let
-        (Vec2 x_ _) =
-            f x
-
-        (Vec2 _ y_) =
-            f y
-    in
-    Vec2 x_ y_
-
-
-andThen : (a -> Vec2 b) -> Vec2 a -> Vec2 b
-andThen =
-    bind
-
-
-return : a -> Vec2 a
-return =
-    pure
-
-
-
--- FOLDABLE
-
-
-foldl : (a -> b -> b) -> b -> Vec2 a -> b
-foldl f acc (Vec2 x y) =
-    f y (f x acc)
-
-
-foldl1 : (a -> a -> a) -> Vec2 a -> a
-foldl1 f (Vec2 x y) =
-    f y x
-
-
-foldr : (a -> b -> b) -> b -> Vec2 a -> b
-foldr f acc (Vec2 x y) =
-    f x (f y acc)
-
-
-foldr1 : (a -> a -> a) -> Vec2 a -> a
-foldr1 f (Vec2 x y) =
-    f x y
-
-
-
--- GET / UPDATE
-
-
-mapNth0 : (a -> a) -> Vec2 a -> Vec2 a
-mapNth0 f (Vec2 x y) =
-    Vec2 (f x) y
-
-
-mapNth1 : (a -> a) -> Vec2 a -> Vec2 a
-mapNth1 f (Vec2 x y) =
-    Vec2 x (f y)
-
-
-getNth0 : Vec2 a -> a
-getNth0 (Vec2 x _) =
-    x
-
-
-getNth1 : Vec2 a -> a
-getNth1 (Vec2 _ y) =
-    y
-
-
-
--- CONVERSIONS
-
-
-toTuple : Vec2 a -> ( a, a )
-toTuple (Vec2 x y) =
-    ( x, y )
-
-
-fromTuple : ( a, a ) -> Vec2 a
-fromTuple ( x, y ) =
-    Vec2 x y
-
-
-toList : Vec2 a -> List a
-toList =
-    foldl (::) []
-
-
-fromList : List a -> Maybe (Vec2 a)
-fromList list =
-    case list of
-        x :: y :: [] ->
-            Just (Vec2 x y)
-
-        _ ->
-            Nothing
-
-
-
--- OTHER OPERATIONS
-
-
-reverse : Vec2 a -> Vec2 a
-reverse (Vec2 x y) =
-    Vec2 y x
-
-
-asArgs : (a -> a -> b) -> Vec2 a -> b
-asArgs f (Vec2 x y) =
-    f x y
+-- -- MONAD
+-- bind : (a -> Vec2 b) -> Vec2 a -> Vec2 b
+-- bind f (Vec2 x y) =
+--     let
+--         (Vec2 x_ _) =
+--             f x
+--         (Vec2 _ y_) =
+--             f y
+--     in
+--     Vec2 x_ y_
+-- andThen : (a -> Vec2 b) -> Vec2 a -> Vec2 b
+-- andThen =
+--     bind
+-- return : a -> Vec2 a
+-- return =
+--     pure
+-- -- FOLDABLE
+-- foldl : (a -> b -> b) -> b -> Vec2 a -> b
+-- foldl f acc (Vec2 x y) =
+--     f y (f x acc)
+-- foldl1 : (a -> a -> a) -> Vec2 a -> a
+-- foldl1 f (Vec2 x y) =
+--     f y x
+-- foldr : (a -> b -> b) -> b -> Vec2 a -> b
+-- foldr f acc (Vec2 x y) =
+--     f x (f y acc)
+-- foldr1 : (a -> a -> a) -> Vec2 a -> a
+-- foldr1 f (Vec2 x y) =
+--     f x y
+-- -- GET / UPDATE
+-- mapNth0 : (a -> a) -> Vec2 a -> Vec2 a
+-- mapNth0 f (Vec2 x y) =
+--     Vec2 (f x) y
+-- mapNth1 : (a -> a) -> Vec2 a -> Vec2 a
+-- mapNth1 f (Vec2 x y) =
+--     Vec2 x (f y)
+-- getNth0 : Vec2 a -> a
+-- getNth0 (Vec2 x _) =
+--     x
+-- getNth1 : Vec2 a -> a
+-- getNth1 (Vec2 _ y) =
+--     y
+-- -- CONVERSIONS
+-- toTuple : Vec2 a -> ( a, a )
+-- toTuple (Vec2 x y) =
+--     ( x, y )
+-- fromTuple : ( a, a ) -> Vec2 a
+-- fromTuple ( x, y ) =
+--     Vec2 x y
+-- toList : Vec2 a -> List a
+-- toList =
+--     foldl (::) []
+-- fromList : List a -> Maybe (Vec2 a)
+-- fromList list =
+--     case list of
+--         x :: y :: [] ->
+--             Just (Vec2 x y)
+--         _ ->
+--             Nothing
+-- -- OTHER OPERATIONS
+-- reverse : Vec2 a -> Vec2 a
+-- reverse (Vec2 x y) =
+--     Vec2 y x
+-- asArgs : (a -> a -> b) -> Vec2 a -> b
+-- asArgs f (Vec2 x y) =
+--     f x y

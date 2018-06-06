@@ -1,21 +1,35 @@
 module Vec2Tests exposing (..)
 
+--import Types exposing (..)
+
 import Expect exposing (Expectation)
 import Fuzz exposing (..)
 import Test exposing (..)
 import Types exposing (..)
-import Vec2
+import Vec2 exposing (Vec2)
+
+
+vec2 : Test
+vec2 =
+    describe
+        "vec2"
+        [ test "behaves like the real constructor" <|
+            \_ ->
+                Vec2.vec2 True False
+                    |> Expect.equal (Vec2 True False)
+        ]
 
 
 map : Test
 map =
-    describe
-        "map"
-        [ test "maps over all fields" <|
-            \_ ->
-                Vec2.map not (Vec2 True False)
-                    |> Expect.equal (Vec2 False True)
-        ]
+    des
+        << cribe
+            "map"
+            [ test "maps over all fields" <|
+                \_ ->
+                    Vec2.map not (Vec2 True False)
+                        |> Expect.equal (Vec2 False True)
+            ]
 
 
 pure : Test
