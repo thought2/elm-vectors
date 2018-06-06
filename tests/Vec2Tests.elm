@@ -13,8 +13,8 @@ map =
         "map"
         [ test "maps over all fields" <|
             \_ ->
-                Vec2.map ((+) 1) (Vec2 1 2)
-                    |> Expect.equal (Vec2 2 3)
+                Vec2.map not (Vec2 True False)
+                    |> Expect.equal (Vec2 False True)
         ]
 
 
@@ -196,21 +196,5 @@ pure =
 --         [ test "asArgs" <|
 --             \_ ->
 --                 Vec2.asArgs 1
---                     |> Expect.equal ()
---         ]
--- combine : Test
--- combine =
---     describe ""
---         [ test "combine" <|
---             \_ ->
---                 Vec2.combine 1
---                     |> Expect.equal ()
---         ]
--- unCombine : Test
--- unCombine =
---     describe ""
---         [ test "unCombine" <|
---             \_ ->
---                 Vec2.unCombine 1
 --                     |> Expect.equal ()
 --         ]

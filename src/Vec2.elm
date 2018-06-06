@@ -1,11 +1,56 @@
 module Vec2 exposing (..)
 
+{-| This library fills a bunch of important niches in Elm. A `Maybe` can help
+you with optional arguments, error handling, and records with optional fields.
+
+
+# Functor
+
+@docs map
+
+
+# Applicative
+
+@docs pure, apply, liftA1, liftA2, liftA3
+
+
+# Monad
+
+@docs bind, andThen, return
+
+
+# Foldable
+
+@docs foldl, foldl1, foldr, foldr1
+
+
+# Get / Update
+
+@docs mapNth0, mapNth1, getNth0, getNth1
+
+
+# Conversions
+
+@docs toTuple, fromTuple, toList, fromList
+
+
+# Other Operations
+
+@docs reverse, asArgs
+
+-}
+
 import Types exposing (..)
 
 
 -- FUNCTOR
 
 
+{-| Map over all fields
+
+    map not (Vec2 True False) == Vec2 False True
+
+-}
 map : (a -> b) -> Vec2 a -> Vec2 b
 map f (Vec2 x y) =
     Vec2 (f x) (f y)
@@ -149,7 +194,7 @@ fromList list =
 
 
 
--- MISC
+-- OTHER OPERATIONS
 
 
 reverse : Vec2 a -> Vec2 a
@@ -160,21 +205,3 @@ reverse (Vec2 x y) =
 asArgs : (a -> a -> b) -> Vec2 a -> b
 asArgs f (Vec2 x y) =
     f x y
-
-
-
--- LIST OPERATIONS
-
-
-combine : List (Vec2 a) -> Vec2 (List a)
-combine xs =
-    let
-        add =
-            liftA2 (::)
-    in
-    List.foldr add (Vec2 [] []) xs
-
-
-unCombine : Vec2 (List a) -> List (Vec2 a)
-unCombine (Vec2 xs ys) =
-    List.map2 Vec2 xs ys
