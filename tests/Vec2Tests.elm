@@ -22,14 +22,13 @@ vec2 =
 
 map : Test
 map =
-    des
-        << cribe
-            "map"
-            [ test "maps over all fields" <|
-                \_ ->
-                    Vec2.map not (Vec2 True False)
-                        |> Expect.equal (Vec2 False True)
-            ]
+    describe
+        "map"
+        [ test "maps over all fields" <|
+            \_ ->
+                Vec2.map not (Vec2 True False)
+                    |> Expect.equal (Vec2 False True)
+        ]
 
 
 pure : Test
