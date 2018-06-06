@@ -60,26 +60,51 @@ map f (Vec2 x y) =
 -- APPLICATIVE
 
 
+{-| Initialize all fields with the same value
+
+    Vec2.pure True == (Vec2 True True)
+
+-}
 pure : a -> Vec2 a
 pure x =
     Vec2 x x
 
 
+{-| Apply functions from a vector one by one to values of another vector.
+
+    apply (Vec2 not not) (Vec2 True False) == Vec2 False True
+
+-}
 apply : Vec2 (a -> b) -> Vec2 a -> Vec2 b
 apply (Vec2 x1 y1) (Vec2 x2 y2) =
     Vec2 (x1 x2) (y1 y2)
 
 
+{-| Lift unary function to the context and apply
+
+    liftaA1 not (Vec2 True False) == Vec2 False True
+
+-}
 liftA1 : (a -> b) -> Vec2 a -> Vec2 b
 liftA1 f v =
     apply (pure f) v
 
 
+{-| Lift binary function to the context and apply
+
+    liftaA2 (+) (Vec2 1 2) (Vec2 10 20) == Vec2 11 22
+
+-}
 liftA2 : (a -> b -> c) -> Vec2 a -> Vec2 b -> Vec2 c
 liftA2 f v1 v2 =
     apply (liftA1 f v1) v2
 
 
+{-| Lift ternary function to the context and apply
+
+    liftaA3 clamp (Vec2 0 0) (Vec2 100 200) (Vec2 200 300) == Vec2 100 200
+
+-}
 liftA3 :
     (a -> b -> c -> d)
     -> Vec2 a

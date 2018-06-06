@@ -24,44 +24,52 @@ pure =
         "pure"
         [ test "initializes all fields" <|
             \_ ->
-                Vec2.pure 1
-                    |> Expect.equal (Vec2 1 1)
+                Vec2.pure True
+                    |> Expect.equal (Vec2 True True)
+        ]
+
+
+apply : Test
+apply =
+    describe "apply"
+        [ test "applies functions in the context" <|
+            \_ ->
+                Vec2.apply (Vec2 not not) (Vec2 True False)
+                    |> Expect.equal (Vec2 False True)
+        ]
+
+
+liftA1 : Test
+liftA1 =
+    describe "liftA1"
+        [ test "lifts and applies unary function" <|
+            \_ ->
+                Vec2.liftA1 not (Vec2 True False)
+                    |> Expect.equal (Vec2 False True)
+        ]
+
+
+liftA2 : Test
+liftA2 =
+    describe "liftA2"
+        [ test "lifts and applies binary function" <|
+            \_ ->
+                Vec2.liftA2 (+) (Vec2 1 2) (Vec2 10 20)
+                    |> Expect.equal (Vec2 11 22)
+        ]
+
+
+liftA3 : Test
+liftA3 =
+    describe "liftA3"
+        [ test "lifts and applies ternary function" <|
+            \_ ->
+                Vec2.liftA3 clamp (Vec2 0 0) (Vec2 100 200) (Vec2 200 300)
+                    |> Expect.equal (Vec2 100 200)
         ]
 
 
 
--- apply : Test
--- apply =
---     describe ""
---         [ test "apply" <|
---             \_ ->
---                 Vec2.apply 1
---                     |> Expect.equal ()
---         ]
--- liftaA1 : Test
--- liftaA1 =
---     describe ""
---         [ test "liftaA1" <|
---             \_ ->
---                 Vec2.liftA1 1
---                     |> Expect.equal ()
---         ]
--- liftaA2 : Test
--- liftaA2 =
---     describe ""
---         [ test "liftaA2" <|
---             \_ ->
---                 Vec2.liftA2 1
---                     |> Expect.equal ()
---         ]
--- liftaA3 : Test
--- liftaA3 =
---     describe ""
---         [ test "liftaA3" <|
---             \_ ->
---                 Vec2.liftA3 1
---                     |> Expect.equal ()
---         ]
 -- bind : Test
 -- bind =
 --     describe ""
