@@ -322,39 +322,60 @@ mapNth1 =
 
 
 
--- -- CONVERSIONS
--- toTuple : Test
--- toTuple =
---     describe ""
---         [ test "toTuple" <|
---             \_ ->
---                 Vec2.toTuple 1
---                     |> Expect.equal ()
---         ]
--- fromTuple : Test
--- fromTuple =
---     describe ""
---         [ test "fromTuple" <|
---             \_ ->
---                 Vec2.fromTuple 1
---                     |> Expect.equal ()
---         ]
--- toList : Test
--- toList =
---     describe ""
---         [ test "toList" <|
---             \_ ->
---                 Vec2.toList 1
---                     |> Expect.equal ()
---         ]
--- fromList : Test
--- fromList =
---     describe ""
---         [ test "fromList" <|
---             \_ ->
---                 Vec2.fromList 1
---                     |> Expect.equal ()
---         ]
+-- CONVERSIONS
+
+
+toTuple : Test
+toTuple =
+    describe "toTuple"
+        [ fuzz (Fuzz.map2 (,) int int) "makes a 2-tuple" <|
+            \( n0, n1 ) ->
+                Vec2.toTuple (Vec2 n0 n1)
+                    |> Expect.equal ( n0, n1 )
+        ]
+
+
+fromTuple : Test
+fromTuple =
+    describe "fromTuple"
+        [ fuzz (Fuzz.map2 (,) int int) "makes a Vec2 from a 2-tuple" <|
+            \( n0, n1 ) ->
+                Vec2.fromTuple ( n0, n1 )
+                    |> Expect.equal (Vec2 n0 n1)
+        ]
+
+
+toList : Test
+toList =
+    describe "toList"
+        [ fuzz (Fuzz.map2 (,) int int) "makes a list of length 2" <|
+            \( n0, n1 ) ->
+                Vec2.toList (Vec2 n0 n1)
+                    |> Expect.equal [ n0, n1 ]
+        ]
+
+
+fromList : Test
+fromList =
+    describe "fromList"
+        [ fuzz (Fuzz.map2 (,) int int) "makes a vector from a length 2 list" <|
+            \( n0, n1 ) ->
+                Vec2.fromList [ n0, n1 ]
+                    |> Expect.equal (Just (Vec2 n0 n1))
+        , let
+            intWithout n =
+                Fuzz.conditional
+                    { retries = 0, fallback = always 0, condition = (==) n }
+                    int
+          in
+          fuzz (Fuzz.map2 (,) (intWithout 2) int) "makes no vector from lists of length /= 2" <|
+            \( n0, n1 ) ->
+                Vec2.fromList (List.repeat n0 n1)
+                    |> Expect.equal Nothing
+        ]
+
+
+
 -- -- OTHER OPERATIONS
 -- reverse : Test
 -- reverse =

@@ -33,16 +33,21 @@ you with optional arguments, error handling, and records with optional fields.
 
 @docs foldl, foldl1, foldr, foldr1
 
+
+# Get / Update
+
+@docs mapNth0, mapNth1, getNth0, getNth1
+
+
+# Conversions
+
+@docs toTuple, fromTuple, toList, fromList
+
 -}
 
 import Types exposing (..)
 
 
---
--- # Get / Update
--- @docs mapNth0, mapNth1, getNth0, getNth1
--- # Conversions
--- @docs toTuple, fromTuple, toList, fromList
 -- # Other Operations
 -- @docs reverse, asArgs
 --
@@ -297,23 +302,56 @@ mapNth1 f (Vec2 x y) =
 
 
 
--- -- CONVERSIONS
--- toTuple : Vec2 a -> ( a, a )
--- toTuple (Vec2 x y) =
---     ( x, y )
--- fromTuple : ( a, a ) -> Vec2 a
--- fromTuple ( x, y ) =
---     Vec2 x y
--- toList : Vec2 a -> List a
--- toList =
---     foldl (::) []
--- fromList : List a -> Maybe (Vec2 a)
--- fromList list =
---     case list of
---         x :: y :: [] ->
---             Just (Vec2 x y)
---         _ ->
---             Nothing
+-- CONVERSIONS
+
+
+{-| creates a 2-tuple from vector
+
+    toTuple (Vec2 0 1) == (0, 1)
+
+-}
+toTuple : Vec2 a -> ( a, a )
+toTuple (Vec2 x y) =
+    ( x, y )
+
+
+{-| creates a vector from a 2-tuple
+
+    fromTuple (0, 1) == (Vec2 0 1)
+
+-}
+fromTuple : ( a, a ) -> Vec2 a
+fromTuple ( x, y ) =
+    Vec2 x y
+
+
+{-| creates a list from vector elements
+
+    toList (Vec2 0 1) == [0, 1]
+
+-}
+toList : Vec2 a -> List a
+toList =
+    foldr (::) []
+
+
+{-| creates a vector just from length 2 lists
+
+    fromList [] == Nothing
+    fromList [0, 1] == Just (Vec2 0 1)
+
+-}
+fromList : List a -> Maybe (Vec2 a)
+fromList list =
+    case list of
+        x :: y :: [] ->
+            Just (Vec2 x y)
+
+        _ ->
+            Nothing
+
+
+
 -- -- OTHER OPERATIONS
 -- reverse : Vec2 a -> Vec2 a
 -- reverse (Vec2 x y) =
