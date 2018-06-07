@@ -58,6 +58,7 @@ type alias Vec2 a =
 
 {-| Construct (Vec2 a) types
 
+    myVec : Vec2 Bool
     myVec =
         vec2 True False
 
@@ -97,7 +98,8 @@ pure x =
 
 {-| Apply functions from a vector one by one to values of another vector.
 
-    apply (Vec2 not not) (Vec2 True False) == Vec2 False True
+    apply (Vec2 not not) (Vec2 True False)
+        == Vec2 False True
 
 -}
 apply : Vec2 (a -> b) -> Vec2 a -> Vec2 b
@@ -107,7 +109,8 @@ apply (Vec2 x1 y1) (Vec2 x2 y2) =
 
 {-| Lift unary function to the context and apply
 
-    liftaA1 not (Vec2 True False) == Vec2 False True
+    liftaA1 not (Vec2 True False)
+        == Vec2 False True
 
 -}
 liftA1 : (a -> b) -> Vec2 a -> Vec2 b
@@ -117,7 +120,8 @@ liftA1 f v =
 
 {-| Lift binary function to the context and apply
 
-    liftaA2 (+) (Vec2 1 2) (Vec2 10 20) == Vec2 11 22
+    liftaA2 (+) (Vec2 1 2) (Vec2 10 20)
+        == Vec2 11 22
 
 -}
 liftA2 : (a -> b -> c) -> Vec2 a -> Vec2 b -> Vec2 c
@@ -127,7 +131,12 @@ liftA2 f v1 v2 =
 
 {-| Lift ternary function to the context and apply
 
-    liftaA3 clamp (Vec2 0 0) (Vec2 100 200) (Vec2 200 300) == Vec2 100 200
+    liftaA3
+        clamp
+        (Vec2 0 0)
+        (Vec2 100 200)
+        (Vec2 200 300)
+        == Vec2 100 200
 
 -}
 liftA3 :
@@ -141,22 +150,51 @@ liftA3 f v1 v2 v3 =
 
 
 
--- -- MONAD
--- bind : (a -> Vec2 b) -> Vec2 a -> Vec2 b
--- bind f (Vec2 x y) =
---     let
---         (Vec2 x_ _) =
---             f x
---         (Vec2 _ y_) =
---             f y
---     in
---     Vec2 x_ y_
--- andThen : (a -> Vec2 b) -> Vec2 a -> Vec2 b
--- andThen =
---     bind
--- return : a -> Vec2 a
--- return =
---     pure
+-- MONAD
+
+
+{-| Lift ternary function to the context and apply
+
+Say you have a library providing you the following 'complex' vector constructor.
+
+    createVec : Int -> Vec2 (List String)
+    createVec n =
+        vec2 (List.repeat n "x") (List.repeat n "y")
+
+And this vector:
+
+    myVec =
+        vec2 1 2
+
+With `bind` you can archive the following:
+
+    bind createVec myVec
+        == Vec2 "x" "yy"
+
+-}
+bind : (a -> Vec2 b) -> Vec2 a -> Vec2 b
+bind f (Vec2 x y) =
+    let
+        (Vec2 x_ _) =
+            f x
+
+        (Vec2 _ y_) =
+            f y
+    in
+    Vec2 x_ y_
+
+
+andThen : (a -> Vec2 b) -> Vec2 a -> Vec2 b
+andThen =
+    bind
+
+
+return : a -> Vec2 a
+return =
+    pure
+
+
+
 -- -- FOLDABLE
 -- foldl : (a -> b -> b) -> b -> Vec2 a -> b
 -- foldl f acc (Vec2 x y) =

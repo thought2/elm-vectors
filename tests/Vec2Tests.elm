@@ -6,7 +6,7 @@ import Expect exposing (Expectation)
 import Fuzz exposing (..)
 import Test exposing (..)
 import Types exposing (..)
-import Vec2 exposing (Vec2)
+import Vec2 exposing (..)
 
 
 vec2 : Test
@@ -82,15 +82,25 @@ liftA3 =
         ]
 
 
+bind : Test
+bind =
+    describe "bind"
+        [ test "bind" <|
+            \_ ->
+                let
+                    createVec : Int -> Types.Vec2 (List String)
+                    createVec n =
+                        Vec2.vec2 (List.repeat n "x") (List.repeat n "y")
 
--- bind : Test
--- bind =
---     describe ""
---         [ test "bind" <|
---             \_ ->
---                 Vec2.bind 1
---                     |> Expect.equal ()
---         ]
+                    myVec =
+                        Vec2.vec2 1 2
+                in
+                Vec2.bind createVec myVec
+                    |> Expect.equal (Vec2 [ "x" ] [ "y", "y" ])
+        ]
+
+
+
 -- andThen : Test
 -- andThen =
 --     describe ""
