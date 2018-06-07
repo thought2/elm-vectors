@@ -253,19 +253,50 @@ foldr1 f (Vec2 x y) =
 
 
 
--- -- GET / UPDATE
--- mapNth0 : (a -> a) -> Vec2 a -> Vec2 a
--- mapNth0 f (Vec2 x y) =
---     Vec2 (f x) y
--- mapNth1 : (a -> a) -> Vec2 a -> Vec2 a
--- mapNth1 f (Vec2 x y) =
---     Vec2 x (f y)
--- getNth0 : Vec2 a -> a
--- getNth0 (Vec2 x _) =
---     x
--- getNth1 : Vec2 a -> a
--- getNth1 (Vec2 _ y) =
---     y
+-- GET / UPDATE
+
+
+{-| Takes element at position 0
+
+    getNth0 (Vec2 0 1) == 0
+
+-}
+getNth0 : Vec2 a -> a
+getNth0 (Vec2 x _) =
+    x
+
+
+{-| Takes element at position 1
+
+    getNth1 (Vec2 0 1) == 1
+
+-}
+getNth1 : Vec2 a -> a
+getNth1 (Vec2 _ y) =
+    y
+
+
+{-| maps over element at position 0
+
+    mapNth0 not (Vec2 True True) == Vec2 False True
+
+-}
+mapNth0 : (a -> a) -> Vec2 a -> Vec2 a
+mapNth0 f (Vec2 x y) =
+    Vec2 (f x) y
+
+
+{-| maps over element at position 1
+
+    mapNth0 not (Vec2 True True) == Vec2 True False
+
+-}
+mapNth1 : (a -> a) -> Vec2 a -> Vec2 a
+mapNth1 f (Vec2 x y) =
+    Vec2 x (f y)
+
+
+
 -- -- CONVERSIONS
 -- toTuple : Vec2 a -> ( a, a )
 -- toTuple (Vec2 x y) =

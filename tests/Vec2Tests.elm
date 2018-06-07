@@ -278,39 +278,50 @@ foldr1 =
 
 
 
--- -- GET / UPDATE
--- mapNth0 : Test
--- mapNth0 =
---     describe ""
---         [ test "mapNth0" <|
---             \_ ->
---                 Vec2.mapNth0 1
---                     |> Expect.equal ()
---         ]
--- mapNth1 : Test
--- mapNth1 =
---     describe ""
---         [ test "mapNth1" <|
---             \_ ->
---                 Vec2.mapNth1 1
---                     |> Expect.equal ()
---         ]
--- getNth0 : Test
--- getNth0 =
---     describe ""
---         [ test "getNth0" <|
---             \_ ->
---                 Vec2.getNth0 1
---                     |> Expect.equal ()
---         ]
--- getNth1 : Test
--- getNth1 =
---     describe ""
---         [ test "getNth1" <|
---             \_ ->
---                 Vec2.getNth1 1
---                     |> Expect.equal ()
---         ]
+-- GET / UPDATE
+
+
+getNth0 : Test
+getNth0 =
+    describe "getNth0"
+        [ fuzz (Fuzz.map2 (,) int int) "takes element at position 0" <|
+            \( n0, n1 ) ->
+                Vec2.getNth0 (Vec2 n0 n1)
+                    |> Expect.equal n0
+        ]
+
+
+getNth1 : Test
+getNth1 =
+    describe "getNth1"
+        [ fuzz (Fuzz.map2 (,) int int) "takes element at position 1" <|
+            \( n0, n1 ) ->
+                Vec2.getNth1 (Vec2 n0 n1)
+                    |> Expect.equal n1
+        ]
+
+
+mapNth0 : Test
+mapNth0 =
+    describe "mapNth0"
+        [ fuzz (Fuzz.map2 (,) bool bool) "maps over element at position 0" <|
+            \( b0, b1 ) ->
+                Vec2.mapNth0 not (Vec2 b0 b1)
+                    |> Expect.equal (Vec2 (not b0) b1)
+        ]
+
+
+mapNth1 : Test
+mapNth1 =
+    describe "mapNth1"
+        [ fuzz (Fuzz.map2 (,) bool bool) "maps over element at position 0" <|
+            \( b0, b1 ) ->
+                Vec2.mapNth1 not (Vec2 b0 b1)
+                    |> Expect.equal (Vec2 b0 (not b1))
+        ]
+
+
+
 -- -- CONVERSIONS
 -- toTuple : Test
 -- toTuple =
