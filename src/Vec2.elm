@@ -28,14 +28,17 @@ you with optional arguments, error handling, and records with optional fields.
 
 @docs bind, andThen, return
 
+
+# Foldable
+
+@docs foldl, foldl1, foldr, foldr1
+
 -}
 
 import Types exposing (..)
 
 
 --
--- # Foldable
--- @docs foldl, foldl1, foldr, foldr1
 -- # Get / Update
 -- @docs mapNth0, mapNth1, getNth0, getNth1
 -- # Conversions
@@ -203,18 +206,53 @@ return =
 
 
 -- -- FOLDABLE
--- foldl : (a -> b -> b) -> b -> Vec2 a -> b
--- foldl f acc (Vec2 x y) =
---     f y (f x acc)
--- foldl1 : (a -> a -> a) -> Vec2 a -> a
--- foldl1 f (Vec2 x y) =
---     f y x
--- foldr : (a -> b -> b) -> b -> Vec2 a -> b
--- foldr f acc (Vec2 x y) =
---     f x (f y acc)
--- foldr1 : (a -> a -> a) -> Vec2 a -> a
--- foldr1 f (Vec2 x y) =
---     f x y
+
+
+{-| Fold left over the vector
+
+    foldl (::) [] (Vec2 2 1)
+        == [1, 2]
+
+-}
+foldl : (a -> b -> b) -> b -> Vec2 a -> b
+foldl f acc (Vec2 x y) =
+    f y (f x acc)
+
+
+{-| Like `foldl` but without initial value
+
+    foldl1 (-) (Vec2 1 3)
+        == (1 - 3)
+
+-}
+foldl1 : (a -> a -> a) -> Vec2 a -> a
+foldl1 f (Vec2 x y) =
+    f x y
+
+
+{-| Fold right over the vector
+
+    foldr (::) [] (Vec2 2 1)
+        == [2, 1]
+
+-}
+foldr : (a -> b -> b) -> b -> Vec2 a -> b
+foldr f acc (Vec2 x y) =
+    f x (f y acc)
+
+
+{-| Like `foldr` but without initial value
+
+    foldr1 (-) (Vec2 1 3)
+        == (3 - 1)
+
+-}
+foldr1 : (a -> a -> a) -> Vec2 a -> a
+foldr1 f (Vec2 x y) =
+    f y x
+
+
+
 -- -- GET / UPDATE
 -- mapNth0 : (a -> a) -> Vec2 a -> Vec2 a
 -- mapNth0 f (Vec2 x y) =

@@ -235,38 +235,49 @@ monadLaws =
 
 
 -- -- FOLDABLE
--- foldl : Test
--- foldl =
---     describe ""
---         [ test "foldl" <|
---             \_ ->
---                 Vec2.foldl 1
---                     |> Expect.equal ()
---         ]
--- foldl1 : Test
--- foldl1 =
---     describe ""
---         [ test "foldl1" <|
---             \_ ->
---                 Vec2.foldl1 1
---                     |> Expect.equal ()
---         ]
--- foldr : Test
--- foldr =
---     describe ""
---         [ test "foldr" <|
---             \_ ->
---                 Vec2.foldr 1
---                     |> Expect.equal ()
---         ]
--- foldr1 : Test
--- foldr1 =
---     describe ""
---         [ test "foldr1" <|
---             \_ ->
---                 Vec2.foldr1 1
---                     |> Expect.equal ()
---         ]
+
+
+foldl : Test
+foldl =
+    describe "foldl"
+        [ fuzz (Fuzz.map2 (,) int int) "conses from left to right" <|
+            \( n1, n2 ) ->
+                Vec2.foldl (::) [] (Vec2 n1 n2)
+                    |> Expect.equal [ n2, n1 ]
+        ]
+
+
+foldl1 : Test
+foldl1 =
+    describe "foldl1"
+        [ fuzz (Fuzz.map2 (,) int int) "subtracts from left to right" <|
+            \( n1, n2 ) ->
+                Vec2.foldl1 (-) (Vec2 n1 n2)
+                    |> Expect.equal (n1 - n2)
+        ]
+
+
+foldr : Test
+foldr =
+    describe "foldr"
+        [ fuzz (Fuzz.map2 (,) int int) "conses from right to left" <|
+            \( n1, n2 ) ->
+                Vec2.foldl (::) [] (Vec2 n1 n2)
+                    |> Expect.equal [ n2, n1 ]
+        ]
+
+
+foldr1 : Test
+foldr1 =
+    describe "foldr1"
+        [ fuzz (Fuzz.map2 (,) int int) "subtracts from right to left" <|
+            \( n1, n2 ) ->
+                Vec2.foldr1 (-) (Vec2 n1 n2)
+                    |> Expect.equal (n2 - n1)
+        ]
+
+
+
 -- -- GET / UPDATE
 -- mapNth0 : Test
 -- mapNth0 =
