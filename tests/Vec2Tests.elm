@@ -376,20 +376,24 @@ fromList =
 
 
 
--- -- OTHER OPERATIONS
--- reverse : Test
--- reverse =
---     describe ""
---         [ test "reverse" <|
---             \_ ->
---                 Vec2.reverse 1
---                     |> Expect.equal ()
---         ]
--- asArgs : Test
--- asArgs =
---     describe ""
---         [ test "asArgs" <|
---             \_ ->
---                 Vec2.asArgs 1
---                     |> Expect.equal ()
---         ]
+-- OTHER OPERATIONS
+
+
+reverse : Test
+reverse =
+    describe "reverse"
+        [ fuzz (Fuzz.map2 (,) int int) "reverses the vector elements" <|
+            \( n0, n1 ) ->
+                Vec2.reverse (Vec2 n0 n1)
+                    |> Expect.equal (Vec2 n1 n0)
+        ]
+
+
+asArgs : Test
+asArgs =
+    describe "asArgs"
+        [ fuzz (Fuzz.map2 (,) int int) "use vector elements as function arguments" <|
+            \( n0, n1 ) ->
+                Vec2.asArgs (+) (Vec2 n0 n1)
+                    |> Expect.equal (n0 + n1)
+        ]

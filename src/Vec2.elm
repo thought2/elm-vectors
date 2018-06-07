@@ -1,7 +1,6 @@
 module Vec2 exposing (..)
 
-{-| This library fills a bunch of important niches in Elm. A `Maybe` can help
-you with optional arguments, error handling, and records with optional fields.
+{-|
 
 
 # Type Aliases
@@ -43,14 +42,16 @@ you with optional arguments, error handling, and records with optional fields.
 
 @docs toTuple, fromTuple, toList, fromList
 
+
+# Other Operations
+
+@docs reverse, asArgs
+
 -}
 
 import Types exposing (..)
 
 
--- # Other Operations
--- @docs reverse, asArgs
---
 -- TYPE ALIASES
 
 
@@ -352,10 +353,24 @@ fromList list =
 
 
 
--- -- OTHER OPERATIONS
--- reverse : Vec2 a -> Vec2 a
--- reverse (Vec2 x y) =
---     Vec2 y x
--- asArgs : (a -> a -> b) -> Vec2 a -> b
--- asArgs f (Vec2 x y) =
---     f x y
+-- OTHER OPERATIONS
+
+
+{-| Reverse the elements of a vector
+
+    reverse (Vec2 1 2) == Vec2 2 1
+
+-}
+reverse : Vec2 a -> Vec2 a
+reverse (Vec2 x y) =
+    Vec2 y x
+
+
+{-| use vector elements as function arguments
+
+    asArgs (+) (Vec2 1 2) == 3
+
+-}
+asArgs : (a -> a -> b) -> Vec2 a -> b
+asArgs f (Vec2 x y) =
+    f x y
