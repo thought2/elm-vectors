@@ -9,6 +9,9 @@ import Types exposing (..)
 import Vec2 exposing (..)
 
 
+-- TYPE CONSTRUCTORS
+
+
 vec2 : Test
 vec2 =
     describe
@@ -20,6 +23,10 @@ vec2 =
         ]
 
 
+
+-- FUNCTOR
+
+
 map : Test
 map =
     describe
@@ -29,6 +36,32 @@ map =
                 Vec2.map not (Vec2 True False)
                     |> Expect.equal (Vec2 False True)
         ]
+
+
+functorLaws : Test
+functorLaws =
+    describe
+        "Functor laws"
+        [ fuzz (Fuzz.map2 Vec2 int int) "Identity" <|
+            \fuzzyIntVec ->
+                Vec2.map identity fuzzyIntVec
+                    |> Expect.equal fuzzyIntVec
+        , fuzz (Fuzz.map3 (,,) (Fuzz.map2 Vec2 int int) int int) "Composition" <|
+            \( fuzzyIntVec, n1, n2 ) ->
+                let
+                    f =
+                        (+) n1
+
+                    g =
+                        (*) n2
+                in
+                Vec2.map (f << g) fuzzyIntVec
+                    |> Expect.equal ((Vec2.map f << Vec2.map g) fuzzyIntVec)
+        ]
+
+
+
+-- APPLICATIVE
 
 
 pure : Test
@@ -49,6 +82,47 @@ apply =
             \_ ->
                 Vec2.apply (Vec2 not not) (Vec2 True False)
                     |> Expect.equal (Vec2 False True)
+        ]
+
+
+applicativeLaws : Test
+applicativeLaws =
+    describe
+        "Applicative laws"
+        [ fuzz (Fuzz.map2 Vec2 int int) "Identity" <|
+            \fuzzyIntVec ->
+                Vec2.apply (Vec2.pure identity) fuzzyIntVec
+                    |> Expect.equal fuzzyIntVec
+        , fuzz (Fuzz.map2 (,) int int) "Homomorphism" <|
+            \( n1, n2 ) ->
+                let
+                    f =
+                        (+) n1
+                in
+                Vec2.apply (Vec2.pure f) (Vec2.pure n2)
+                    |> Expect.equal (Vec2.pure (f n2))
+        , fuzz (Fuzz.map2 (,) int int) "Interchange" <|
+            \( n1, n2 ) ->
+                let
+                    f =
+                        Vec2.pure ((+) n1)
+                in
+                Vec2.apply f (Vec2.pure n2)
+                    |> Expect.equal (Vec2.apply (Vec2.pure ((|>) n2)) f)
+        , fuzz (Fuzz.map3 (,,) int int int) "Composition" <|
+            \( n1, n2, n3 ) ->
+                let
+                    f1 =
+                        Vec2.pure ((+) n1)
+
+                    f2 =
+                        Vec2.pure ((-) n2)
+
+                    x =
+                        Vec2.pure n3
+                in
+                Vec2.apply (Vec2.apply (Vec2.apply (Vec2.pure (<<)) f1) f2) x
+                    |> Expect.equal (Vec2.apply f1 (Vec2.apply f2 x))
         ]
 
 
@@ -82,41 +156,85 @@ liftA3 =
         ]
 
 
+
+-- MONAD
+
+
 bind : Test
 bind =
-    describe "bind"
+    let
+        createVec : Int -> Types.Vec2 (List String)
+        createVec n =
+            Vec2.vec2 (List.repeat n "x") (List.repeat n "y")
+
+        myVec =
+            Vec2.vec2 1 2
+
+        expectedResult =
+            Vec2 [ "x" ] [ "y", "y" ]
+    in
+    describe "bind/andThen"
         [ test "bind" <|
             \_ ->
-                let
-                    createVec : Int -> Types.Vec2 (List String)
-                    createVec n =
-                        Vec2.vec2 (List.repeat n "x") (List.repeat n "y")
-
-                    myVec =
-                        Vec2.vec2 1 2
-                in
                 Vec2.bind createVec myVec
-                    |> Expect.equal (Vec2 [ "x" ] [ "y", "y" ])
+                    |> Expect.equal expectedResult
+        , test "andThen" <|
+            \_ ->
+                Vec2.andThen createVec myVec
+                    |> Expect.equal expectedResult
+        ]
+
+
+return : Test
+return =
+    describe
+        "return"
+        [ test "initializes all fields" <|
+            \_ ->
+                Vec2.return True
+                    |> Expect.equal (Vec2 True True)
+        ]
+
+
+monadLaws : Test
+monadLaws =
+    describe
+        "Monad laws"
+        [ fuzz (Fuzz.map2 Vec2 int int) "Left identity" <|
+            \n ->
+                let
+                    f x =
+                        Vec2 x x
+                in
+                Vec2.bind f (Vec2.return n)
+                    |> Expect.equal (f n)
+        , fuzz (Fuzz.map2 (,) int int) "Right identity" <|
+            \( n1, n2 ) ->
+                let
+                    m =
+                        Vec2 n1 n2
+                in
+                Vec2.bind Vec2.return m
+                    |> Expect.equal m
+        , fuzz (Fuzz.map2 (,) int int) "Associativity" <|
+            \( n1, n2 ) ->
+                let
+                    f x =
+                        Vec2.pure (x + n1)
+
+                    g x =
+                        Vec2.pure (x - n2)
+
+                    m =
+                        Vec2 n1 n2
+                in
+                Vec2.bind g (Vec2.bind f m)
+                    |> Expect.equal (Vec2.bind (\x -> Vec2.bind g (f x)) m)
         ]
 
 
 
--- andThen : Test
--- andThen =
---     describe ""
---         [ test "andThen" <|
---             \_ ->
---                 Vec2.andThen 1
---                     |> Expect.equal ()
---         ]
--- return : Test
--- return =
---     describe ""
---         [ test "return" <|
---             \_ ->
---                 Vec2.return 1
---                     |> Expect.equal ()
---         ]
+-- -- FOLDABLE
 -- foldl : Test
 -- foldl =
 --     describe ""
@@ -149,6 +267,7 @@ bind =
 --                 Vec2.foldr1 1
 --                     |> Expect.equal ()
 --         ]
+-- -- GET / UPDATE
 -- mapNth0 : Test
 -- mapNth0 =
 --     describe ""
@@ -181,6 +300,7 @@ bind =
 --                 Vec2.getNth1 1
 --                     |> Expect.equal ()
 --         ]
+-- -- CONVERSIONS
 -- toTuple : Test
 -- toTuple =
 --     describe ""
@@ -213,6 +333,7 @@ bind =
 --                 Vec2.fromList 1
 --                     |> Expect.equal ()
 --         ]
+-- -- OTHER OPERATIONS
 -- reverse : Test
 -- reverse =
 --     describe ""

@@ -4,12 +4,12 @@ module Vec2 exposing (..)
 you with optional arguments, error handling, and records with optional fields.
 
 
-# TYPE ALIASES
+# Type Aliases
 
 @docs Vec2
 
 
-# TYPE CONSTRUCTORS
+# Type Constructors
 
 @docs vec2
 
@@ -23,14 +23,17 @@ you with optional arguments, error handling, and records with optional fields.
 
 @docs pure, apply, liftA1, liftA2, liftA3
 
+
+# Monad
+
+@docs bind, andThen, return
+
 -}
 
 import Types exposing (..)
 
 
 --
--- # Monad
--- @docs bind, andThen, return
 -- # Foldable
 -- @docs foldl, foldl1, foldr, foldr1
 -- # Get / Update
@@ -184,11 +187,15 @@ bind f (Vec2 x y) =
     Vec2 x_ y_
 
 
+{-| Same as `bind`
+-}
 andThen : (a -> Vec2 b) -> Vec2 a -> Vec2 b
 andThen =
     bind
 
 
+{-| Same as `pure`
+-}
 return : a -> Vec2 a
 return =
     pure
