@@ -38,6 +38,28 @@ map =
         ]
 
 
+map2 : Test
+map2 =
+    describe
+        "map2"
+        [ test "maps over all fields of 2 vectors" <|
+            \_ ->
+                Vec2.map2 (\x y -> x :: y :: []) (Vec2 1 2) (Vec2 2 1)
+                    |> Expect.equal (Vec2 [ 1, 2 ] [ 2, 1 ])
+        ]
+
+
+map3 : Test
+map3 =
+    describe
+        "map3"
+        [ test "maps over all fields of 3 vectors" <|
+            \_ ->
+                Vec2.map3 (\x y z -> x :: y :: z :: []) (Vec2 1 3) (Vec2 2 2) (Vec2 3 1)
+                    |> Expect.equal (Vec2 [ 1, 2, 3 ] [ 3, 2, 1 ])
+        ]
+
+
 functorLaws : Test
 functorLaws =
     describe
@@ -126,33 +148,20 @@ applicativeLaws =
         ]
 
 
-liftA : Test
-liftA =
-    describe "liftA"
-        [ test "lifts and applies unary function" <|
-            \_ ->
-                Vec2.liftA not (Vec2 True False)
-                    |> Expect.equal (Vec2 False True)
-        ]
+andMap : Test
+andMap =
+    describe "andMap"
+        [ fuzz (Fuzz.map2 (,) int int) "behaves like apply" <|
+            \( n0, n1 ) ->
+                let
+                    x =
+                        Vec2 n0 n1
 
-
-liftA2 : Test
-liftA2 =
-    describe "liftA2"
-        [ test "lifts and applies binary function" <|
-            \_ ->
-                Vec2.liftA2 (+) (Vec2 1 2) (Vec2 10 20)
-                    |> Expect.equal (Vec2 11 22)
-        ]
-
-
-liftA3 : Test
-liftA3 =
-    describe "liftA3"
-        [ test "lifts and applies ternary function" <|
-            \_ ->
-                Vec2.liftA3 clamp (Vec2 0 0) (Vec2 100 200) (Vec2 200 300)
-                    |> Expect.equal (Vec2 100 200)
+                    f =
+                        Vec2.pure (\x -> x + x)
+                in
+                Vec2.andMap x f
+                    |> Expect.equal (Vec2.apply f x)
         ]
 
 

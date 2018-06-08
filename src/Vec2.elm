@@ -3,11 +3,6 @@ module Vec2 exposing (..)
 {-|
 
 
-# Type Aliases
-
-@docs Vec2
-
-
 # Type Constructors
 
 @docs vec2
@@ -20,7 +15,7 @@ module Vec2 exposing (..)
 
 # Applicative
 
-@docs pure, apply, liftA, liftA2, liftA3
+@docs pure, apply, andMap, map2, map3
 
 
 # Monad
@@ -52,23 +47,10 @@ module Vec2 exposing (..)
 import Types exposing (..)
 
 
--- TYPE ALIASES
-
-
-{-| Polymorphic 2-dimensional vector type
-
-    myVec : Vec2 Bool
-
--}
-type alias Vec2 a =
-    Types.Vec2 a
-
-
-
 -- TYPE CONSTRUCTORS
 
 
-{-| Construct (Vec2 a) types
+{-| Construct `(Vec2 a)` types
 
     myVec : Vec2 Bool
     myVec =
@@ -119,46 +101,36 @@ apply (Vec2 x1 y1) (Vec2 x2 y2) =
     Vec2 (x1 x2) (y1 y2)
 
 
-{-| Lift unary function to the context and apply
+{-| Like apply but better suited for piping.
 
-    liftaA1 not (Vec2 True False)
-        == Vec2 False True
-
--}
-liftA : (a -> b) -> Vec2 a -> Vec2 b
-liftA f v =
-    apply (pure f) v
-
-
-{-| Lift binary function to the context and apply
-
-    liftaA2 (+) (Vec2 1 2) (Vec2 10 20)
-        == Vec2 11 22
+    (\x y z -> x :: y :: z :: [])
+        |> andMap (Vec2 1 3)
+        |> andMap (Vec2 2 2)
+        |> andMap (Vec2 3 1)
+        == Vec2 [ 1, 2, 3] [ 3, 2, 1]
 
 -}
-liftA2 : (a -> b -> c) -> Vec2 a -> Vec2 b -> Vec2 c
-liftA2 f v1 v2 =
-    apply (liftA f v1) v2
+andMap : Vec2 a -> Vec2 (a -> b) -> Vec2 b
+andMap =
+    flip apply
 
 
-{-| Lift ternary function to the context and apply
-
-    liftaA3
-        clamp
-        (Vec2 0 0)
-        (Vec2 100 200)
-        (Vec2 200 300)
-        == Vec2 100 200
-
+{-| Map over all fields of 2 vectors
+map2 (+) (Vec2 1 2) (Vec2 1 1)
+== Vec2 2 3
 -}
-liftA3 :
-    (a -> b -> c -> d)
-    -> Vec2 a
-    -> Vec2 b
-    -> Vec2 c
-    -> Vec2 d
-liftA3 f v1 v2 v3 =
-    apply (liftA2 f v1 v2) v3
+map2 : (a -> b -> c) -> Vec2 a -> Vec2 b -> Vec2 c
+map2 f (Vec2 x0 y0) (Vec2 x1 y1) =
+    Vec2 (f x0 x1) (f y0 y1)
+
+
+{-| Map over all fields of 3 vectors
+map2 (+) (Vec2 1 2) (Vec2 1 1)
+== Vec2 2 3
+-}
+map3 : (a -> b -> c -> d) -> Vec2 a -> Vec2 b -> Vec2 c -> Vec2 d
+map3 f (Vec2 x0 y0) (Vec2 x1 y1) (Vec2 x2 y2) =
+    Vec2 (f x0 x1 x2) (f y0 y1 y2)
 
 
 
