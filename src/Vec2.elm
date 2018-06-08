@@ -137,9 +137,7 @@ map3 f (Vec2 x0 y0) (Vec2 x1 y1) (Vec2 x2 y2) =
 -- MONAD
 
 
-{-| Lift ternary function to the context and apply
-
-Say you have a library providing you the following 'complex' vector constructor.
+{-| Say you have a library providing you the following 'complex' vector constructor.
 
     createVec : Int -> Vec2 (List String)
     createVec n =

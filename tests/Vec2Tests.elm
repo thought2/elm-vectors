@@ -1,7 +1,5 @@
 module Vec2Tests exposing (..)
 
---import Types exposing (..)
-
 import Expect exposing (Expectation)
 import Fuzz exposing (..)
 import Test exposing (..)
@@ -35,28 +33,6 @@ map =
             \_ ->
                 Vec2.map not (Vec2 True False)
                     |> Expect.equal (Vec2 False True)
-        ]
-
-
-map2 : Test
-map2 =
-    describe
-        "map2"
-        [ test "maps over all fields of 2 vectors" <|
-            \_ ->
-                Vec2.map2 (\x y -> x :: y :: []) (Vec2 1 2) (Vec2 2 1)
-                    |> Expect.equal (Vec2 [ 1, 2 ] [ 2, 1 ])
-        ]
-
-
-map3 : Test
-map3 =
-    describe
-        "map3"
-        [ test "maps over all fields of 3 vectors" <|
-            \_ ->
-                Vec2.map3 (\x y z -> x :: y :: z :: []) (Vec2 1 3) (Vec2 2 2) (Vec2 3 1)
-                    |> Expect.equal (Vec2 [ 1, 2, 3 ] [ 3, 2, 1 ])
         ]
 
 
@@ -162,6 +138,28 @@ andMap =
                 in
                 Vec2.andMap x f
                     |> Expect.equal (Vec2.apply f x)
+        ]
+
+
+map2 : Test
+map2 =
+    describe
+        "map2"
+        [ test "maps over all fields of 2 vectors" <|
+            \_ ->
+                Vec2.map2 (\x y -> x :: y :: []) (Vec2 1 2) (Vec2 2 1)
+                    |> Expect.equal (Vec2 [ 1, 2 ] [ 2, 1 ])
+        ]
+
+
+map3 : Test
+map3 =
+    describe
+        "map3"
+        [ test "maps over all fields of 3 vectors" <|
+            \_ ->
+                Vec2.map3 (\x y z -> x :: y :: z :: []) (Vec2 1 3) (Vec2 2 2) (Vec2 3 1)
+                    |> Expect.equal (Vec2 [ 1, 2, 3 ] [ 3, 2, 1 ])
         ]
 
 
