@@ -278,7 +278,7 @@ foldr1 =
 
 
 
--- GET / UPDATE
+-- GET / SET / UPDATE
 
 
 getNth0 : Test
@@ -298,6 +298,26 @@ getNth1 =
             \( n0, n1 ) ->
                 Vec2.getNth1 (Vec2 n0 n1)
                     |> Expect.equal n1
+        ]
+
+
+setNth0 : Test
+setNth0 =
+    describe "setNth0"
+        [ fuzz (Fuzz.map3 (,,) int int int) "sets element at position 0" <|
+            \( n0, n1, n2 ) ->
+                Vec2.setNth0 n0 (Vec2 n1 n2)
+                    |> Expect.equal (Vec2 n0 n2)
+        ]
+
+
+setNth1 : Test
+setNth1 =
+    describe "setNth1"
+        [ fuzz (Fuzz.map3 (,,) int int int) "sets element at position 1" <|
+            \( n0, n1, n2 ) ->
+                Vec2.setNth1 n0 (Vec2 n1 n2)
+                    |> Expect.equal (Vec2 n1 n0)
         ]
 
 

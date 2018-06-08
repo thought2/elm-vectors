@@ -33,9 +33,9 @@ module Vec2 exposing (..)
 @docs foldl, foldl1, foldr, foldr1
 
 
-# Get / Update
+# Set / Get / Update
 
-@docs mapNth0, mapNth1, getNth0, getNth1
+@docs getNth0, getNth1, setNth0, setNth1, mapNth0, mapNth1
 
 
 # Conversions
@@ -259,7 +259,7 @@ foldr1 f (Vec2 x y) =
 
 
 
--- GET / UPDATE
+-- GET / SET/ UPDATE
 
 
 {-| Takes element at position 0
@@ -280,6 +280,26 @@ getNth0 (Vec2 x _) =
 getNth1 : Vec2 a -> a
 getNth1 (Vec2 _ y) =
     y
+
+
+{-| Sets element at position 0
+
+    setNth0 1 (Vec2 0 0) ==  (Vec2 1 0)
+
+-}
+setNth0 : a -> Vec2 a -> Vec2 a
+setNth0 x (Vec2 _ y) =
+    Vec2 x y
+
+
+{-| Sets element at position 0
+
+    setNth0 1 (Vec2 0 0) ==  (Vec2 0 1)
+
+-}
+setNth1 : a -> Vec2 a -> Vec2 a
+setNth1 y (Vec2 x _) =
+    Vec2 x y
 
 
 {-| maps over element at position 0
