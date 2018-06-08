@@ -116,8 +116,10 @@ andMap =
 
 
 {-| Map over all fields of 2 vectors
-map2 (+) (Vec2 1 2) (Vec2 1 1)
-== Vec2 2 3
+
+    map2 (+) (Vec2 1 2) (Vec2 1 1)
+        == Vec2 2 3
+
 -}
 map2 : (a -> b -> c) -> Vec2 a -> Vec2 b -> Vec2 c
 map2 f (Vec2 x0 y0) (Vec2 x1 y1) =
@@ -125,8 +127,10 @@ map2 f (Vec2 x0 y0) (Vec2 x1 y1) =
 
 
 {-| Map over all fields of 3 vectors
-map2 (+) (Vec2 1 2) (Vec2 1 1)
-== Vec2 2 3
+
+    map2 (+) (Vec2 1 2) (Vec2 1 1)
+        == Vec2 2 3
+
 -}
 map3 : (a -> b -> c -> d) -> Vec2 a -> Vec2 b -> Vec2 c -> Vec2 d
 map3 f (Vec2 x0 y0) (Vec2 x1 y1) (Vec2 x2 y2) =
