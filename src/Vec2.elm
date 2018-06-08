@@ -33,7 +33,7 @@ module Vec2 exposing (..)
 @docs foldl, foldl1, foldr, foldr1
 
 
-# Set / Get / Update
+# Get / Set / Update
 
 @docs getNth0, getNth1, setNth0, setNth1, mapNth0, mapNth1
 
