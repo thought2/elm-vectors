@@ -126,12 +126,12 @@ applicativeLaws =
         ]
 
 
-liftA1 : Test
-liftA1 =
-    describe "liftA1"
+liftA : Test
+liftA =
+    describe "liftA"
         [ test "lifts and applies unary function" <|
             \_ ->
-                Vec2.liftA1 not (Vec2 True False)
+                Vec2.liftA not (Vec2 True False)
                     |> Expect.equal (Vec2 False True)
         ]
 

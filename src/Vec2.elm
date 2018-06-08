@@ -20,7 +20,7 @@ module Vec2 exposing (..)
 
 # Applicative
 
-@docs pure, apply, liftA1, liftA2, liftA3
+@docs pure, apply, liftA, liftA2, liftA3
 
 
 # Monad
@@ -125,8 +125,8 @@ apply (Vec2 x1 y1) (Vec2 x2 y2) =
         == Vec2 False True
 
 -}
-liftA1 : (a -> b) -> Vec2 a -> Vec2 b
-liftA1 f v =
+liftA : (a -> b) -> Vec2 a -> Vec2 b
+liftA f v =
     apply (pure f) v
 
 
@@ -138,7 +138,7 @@ liftA1 f v =
 -}
 liftA2 : (a -> b -> c) -> Vec2 a -> Vec2 b -> Vec2 c
 liftA2 f v1 v2 =
-    apply (liftA1 f v1) v2
+    apply (liftA f v1) v2
 
 
 {-| Lift ternary function to the context and apply
@@ -294,7 +294,7 @@ setNth0 x (Vec2 _ y) =
 
 {-| Sets element at position 0
 
-    setNth0 1 (Vec2 0 0) ==  (Vec2 0 1)
+    setNth1 1 (Vec2 0 0) ==  (Vec2 0 1)
 
 -}
 setNth1 : a -> Vec2 a -> Vec2 a
@@ -314,7 +314,7 @@ mapNth0 f (Vec2 x y) =
 
 {-| maps over element at position 1
 
-    mapNth0 not (Vec2 True True) == Vec2 True False
+    mapNth1 not (Vec2 True True) == Vec2 True False
 
 -}
 mapNth1 : (a -> a) -> Vec2 a -> Vec2 a
