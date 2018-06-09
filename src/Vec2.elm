@@ -103,7 +103,7 @@ apply (Vec2 x1 y1) (Vec2 x2 y2) =
 
 {-| Like apply but better suited for piping.
 
-    (\x y z -> x :: y :: z :: [])
+    pure (\x y z -> x :: y :: z :: [])
         |> andMap (Vec2 1 3)
         |> andMap (Vec2 2 2)
         |> andMap (Vec2 3 1)
