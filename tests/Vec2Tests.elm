@@ -103,8 +103,8 @@ applicativeLawsIdentity _ =
 
 applicativeLawsHomomorphism : () -> Test
 applicativeLawsHomomorphism _ =
-    fuzz (Fuzz.map2 (,) int int) "Homomorphism" <|
-        \( n1, n2 ) ->
+    fuzz2 int int "Homomorphism" <|
+        \n1 n2 ->
             let
                 f =
                     (+) n1
@@ -115,8 +115,8 @@ applicativeLawsHomomorphism _ =
 
 applicativeLawsInterchange : () -> Test
 applicativeLawsInterchange _ =
-    fuzz (Fuzz.map2 (,) int int) "Interchange" <|
-        \( n1, n2 ) ->
+    fuzz2 int int "Interchange" <|
+        \n1 n2 ->
             let
                 f =
                     pure ((+) n1)
@@ -127,8 +127,8 @@ applicativeLawsInterchange _ =
 
 applicativeLawsComposition : () -> Test
 applicativeLawsComposition _ =
-    fuzz (Fuzz.map3 (,,) int int int) "Composition" <|
-        \( n1, n2, n3 ) ->
+    fuzz3 int int int "Composition" <|
+        \n1 n2 n3 ->
             let
                 f1 =
                     pure ((+) n1)
