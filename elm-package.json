@@ -1,12 +1,15 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "summary": "Polymorphic vectors for Elm",
     "repository": "https://github.com/thought2/elm-vectors.git",
     "license": "BSD3",
     "source-directories": [
         "src"
     ],
-    "exposed-modules": ["Vec2", "Types"],
+    "exposed-modules": [
+        "Vec2",
+        "Types"
+    ],
     "dependencies": {
         "elm-lang/core": "5.1.1 <= v < 6.0.0"
     },
