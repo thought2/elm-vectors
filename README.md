@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/thought2/elm-vectors.svg?branch=master)](https://travis-ci.org/thought2/elm-vectors)
+
+
 # elm-vectors
 
 This [Elm](http://elm-lang.org/) library provides polymorphic Vector types and some general operations for them.
