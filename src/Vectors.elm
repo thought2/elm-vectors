@@ -1,4 +1,4 @@
-module Types exposing (..)
+module Vectors exposing (..)
 
 {-| Polymorphic vector types
 @docs Vec2

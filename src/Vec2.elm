@@ -44,7 +44,7 @@ module Vec2 exposing (..)
 
 -}
 
-import Types exposing (..)
+import Vectors exposing (..)
 
 
 -- TYPE CONSTRUCTORS
@@ -59,7 +59,7 @@ import Types exposing (..)
 -}
 vec2 : a -> a -> Vec2 a
 vec2 =
-    Types.Vec2
+    Vec2
 
 
 

@@ -3,8 +3,8 @@ module Vec2Tests exposing (..)
 import Expect exposing (Expectation)
 import Fuzz exposing (bool, int)
 import Test exposing (Test, describe, fuzz, fuzz2, fuzz3, test)
-import Types exposing (..)
 import Vec2 exposing (..)
+import Vectors exposing (..)
 
 
 -- TYPE CONSTRUCTORS
@@ -200,7 +200,7 @@ testMap3 =
 testBind : Test
 testBind =
     let
-        createVec : Int -> Types.Vec2 (List String)
+        createVec : Int -> Vec2 (List String)
         createVec n =
             vec2 (List.repeat n "x") (List.repeat n "y")
 
