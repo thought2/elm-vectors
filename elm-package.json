@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "2.0.0",
     "summary": "Polymorphic vectors for Elm",
     "repository": "https://github.com/thought2/elm-vectors.git",
     "license": "BSD3",
